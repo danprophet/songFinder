@@ -1,0 +1,29 @@
+{"headers":
+{"action":"add"},
+"body":
+{"title":"the title","artist":"artist name","lyrics":"the lyrics"}
+}
+-----
+{"headers":
+{"action":"remove"},
+"body":
+{"id":1}
+}
+----
+{"headers":
+{"action":"search_title"},
+"body":
+{"string":”the string to find in title”}
+}
+----
+{"headers":
+{"action":"search_artist"},
+"body":
+{"string":”string artist”}
+}
+----
+{"headers":
+{"action":"search_lyrics"},
+"body":
+{"string":”string artist”}
+}
