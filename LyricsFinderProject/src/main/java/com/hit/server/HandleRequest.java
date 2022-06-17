@@ -7,14 +7,19 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.net.Socket;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.hit.controller.Controller;
 import com.hit.dm.Song;
 
 public class HandleRequest implements Runnable {
@@ -77,6 +82,95 @@ public class HandleRequest implements Runnable {
 		return clientReq;
 	}
 	
+	public Response requestControllerResponse(Request request)
+	{
+		Response returnRes = null;
+		Controller controller = new Controller();
+		switch (request.getCommand())
+		{
+			case "add":
+				System.out.println("[Server] Add command");
+				returnRes = new Response(request.getCommand(), controller.add(new Song(request.getTitle(), request.getArtist(), request.getLyrics())));
+				break;
+			case "remove":
+				System.out.println("[Server] Remove command");
+				returnRes = new Response(request.getCommand(), controller.remove(request.getId()));
+				break;
+			case "search_title":
+				System.out.println("[Server] Search Title command");
+				returnRes = new Response(request.getCommand(), controller.searchTitles(request.getTitle()));
+				break;
+			case "search_artist":
+				System.out.println("[Server] Search Artist command");
+				returnRes = new Response(request.getCommand(), controller.searchArtist(request.getArtist()));
+				break;
+			case "search_lyrics":
+				System.out.println("[Server] Search Lyrics command");
+				returnRes = new Response(request.getCommand(), controller.searchLyrics(request.getLyrics()));
+				break;
+			default:
+				System.out.println("[Server] Unfamiliar command");
+				break;
+		}
+		
+		return returnRes;
+	}
+	
+	public String responseToStr(Response response)
+	{
+		String responseAsString = "";
+		
+		JsonSerializer<Response> serializer = new JsonSerializer<Response>()
+				{
+
+					@Override
+					public JsonElement serialize(Response arg0, Type arg1, JsonSerializationContext arg2) 
+					{
+						JsonObject response = new JsonObject();
+						JsonObject action = new JsonObject();
+						JsonObject body = new JsonObject();
+						
+						action.addProperty("action", arg0.getAction());
+						body.addProperty("status", arg0.getStatus());
+						
+						JsonArray songListResponse = new JsonArray();
+						List<Song> songList = arg0.getSongList();
+						if (songList != null)
+						{
+							//add each song in the song list here:
+							for (int i =0 ; i<songList.size() ; i++)
+							{
+								String title = songList.get(i).getTitle();
+								String artist = songList.get(i).getArtist();
+								String lyrics = songList.get(i).getSongLyrics();
+								int songID = songList.get(i).getSongID();
+								
+								JsonObject song = new JsonObject();
+								song.addProperty("title", title);
+								song.addProperty("artist", artist);
+								song.addProperty("lyrics", lyrics);
+								song.addProperty("songID", songID);
+
+								songListResponse.add(song);
+							}
+						}
+						
+						response.add("action", action);
+						response.add("body", body);
+						
+						return response;
+					}
+			
+				};
+		
+		GsonBuilder gson = new GsonBuilder();
+		gson.registerTypeAdapter(Response.class, serializer);
+		Gson gsonRep = gson.create();
+		responseAsString = gsonRep.toJson(response);
+				
+		return responseAsString;
+	}
+	
 	@Override
 	public void run() 
 	{
@@ -90,22 +184,30 @@ public class HandleRequest implements Runnable {
 			BufferedReader input = new BufferedReader(new InputStreamReader(this.mySocket.getInputStream()));
 			PrintWriter output = new PrintWriter(this.mySocket.getOutputStream());
 			
-			str = input.readLine();
+			str = input.readLine(); // read request str data
 			System.out.println(">> request data read from user"+str);
 			
 			Request clientReq = parseRequest(str);
-			Response serverRes;
 			// pass to controller here:
-			switch (clientReq.getCommand())
-			{
-				case "add":
-					break;
-				default:
-					break;
-			}
+			// pass the answer to function that returns som str to go back to the client.
+			Response serverResponse = requestControllerResponse(clientReq);
+			String responseBack = responseToStr(serverResponse);
 
-				
+			System.out.println("[Server] Sending response back to client");
+			output.write(responseBack);
+			output.flush();
 			
+			System.out.println("[Server] Close buffers");
+			output.close();
+			input.close();
+			
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				mySocket.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
