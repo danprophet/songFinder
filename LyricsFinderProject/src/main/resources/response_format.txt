@@ -1,0 +1,26 @@
+{"headers":
+{"action":"add"},
+"body":
+{"status":True}
+}
+-----
+{"headers":
+{"action":"remove"},
+"body":
+{"status":True}
+}
+-----
+{"headers":
+{"action":"search_title"},
+"body": {"status": False, "songList": (JsonArray){Song, Song, Song}}
+}
+-----
+{"headers":
+{"action":"search_artist"},
+"body": {"status": False, "songList": (JsonArray){Song, Song, Song}}
+}
+-----
+{"headers":
+{"action":"search_lyrics"},
+"body": {"status": False, "songList": (JsonArray){Song, Song, Song}}
+}

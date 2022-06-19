@@ -40,7 +40,7 @@ public class HandleRequest implements Runnable {
 					throws JsonParseException {
 				JsonObject jsonObject = arg0.getAsJsonObject();
 				JsonObject headers = jsonObject.get("headers").getAsJsonObject(); // the command
-				JsonObject body = jsonObject.get("body").getAsJsonObject(); // the contenet of the ewquest
+				JsonObject body = jsonObject.get("body").getAsJsonObject(); // the contenet of the request
 				String command = headers.get("command").getAsString();
 				Request thisRequest = null;
 				// Check which kind of request:
@@ -153,9 +153,15 @@ public class HandleRequest implements Runnable {
 
 								songListResponse.add(song);
 							}
+							
+							body.add("songList", songListResponse);
+						}
+						else
+						{
+							body.add("songList", songListResponse); // empty jsonArray
 						}
 						
-						response.add("action", action);
+						response.add("headers", action);
 						response.add("body", body);
 						
 						return response;
