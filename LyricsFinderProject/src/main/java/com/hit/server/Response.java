@@ -14,6 +14,7 @@ public class Response {
 	
 	public Response (String action, List<Song> resultList)
 	{
+		this.action = action;
 		this.resultSongList = resultList;
 	}
 	

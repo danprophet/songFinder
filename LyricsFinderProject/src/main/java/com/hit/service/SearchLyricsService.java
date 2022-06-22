@@ -17,7 +17,7 @@ public class SearchLyricsService {
 		
 		for (int songIndex=0 ; songIndex < songList.size() ; songIndex++)
 		{
-			int lyricsPosition = this.stringSearcher.compareStrings(lyrics, songList.get(songIndex).getSongLyrics());
+			int lyricsPosition = this.stringSearcher.compareStrings(songList.get(songIndex).getSongLyrics(), lyrics);
 			if (lyricsPosition >= 0 ) // lyrics exist
 			{
 				returnSongList.add(songList.get(songIndex)); // return current song.

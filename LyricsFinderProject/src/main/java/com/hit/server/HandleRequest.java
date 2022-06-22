@@ -41,7 +41,7 @@ public class HandleRequest implements Runnable {
 				JsonObject jsonObject = arg0.getAsJsonObject();
 				JsonObject headers = jsonObject.get("headers").getAsJsonObject(); // the command
 				JsonObject body = jsonObject.get("body").getAsJsonObject(); // the contenet of the request
-				String command = headers.get("command").getAsString();
+				String command = headers.get("action").getAsString();
 				Request thisRequest = null;
 				// Check which kind of request:
 				switch(command)
@@ -62,8 +62,8 @@ public class HandleRequest implements Runnable {
 					{
 						String searchPattern = body.get("string").getAsString();
 						thisRequest = new Request(command, searchPattern);
-
 					}
+					break;
 				default:
 					System.out.println("[SERVER] Request error");
 					break;
@@ -98,15 +98,15 @@ public class HandleRequest implements Runnable {
 				break;
 			case "search_title":
 				System.out.println("[Server] Search Title command");
-				returnRes = new Response(request.getCommand(), controller.searchTitles(request.getTitle()));
+				returnRes = new Response(request.getCommand(), controller.searchTitles(request.getSearchPattern()));
 				break;
 			case "search_artist":
 				System.out.println("[Server] Search Artist command");
-				returnRes = new Response(request.getCommand(), controller.searchArtist(request.getArtist()));
+				returnRes = new Response(request.getCommand(), controller.searchArtist(request.getSearchPattern()));
 				break;
 			case "search_lyrics":
 				System.out.println("[Server] Search Lyrics command");
-				returnRes = new Response(request.getCommand(), controller.searchLyrics(request.getLyrics()));
+				returnRes = new Response(request.getCommand(), controller.searchLyrics(request.getSearchPattern()));
 				break;
 			default:
 				System.out.println("[Server] Unfamiliar command");
@@ -183,8 +183,6 @@ public class HandleRequest implements Runnable {
 		System.out.println("Server - Handle Request now");
 		String str = "";
 		
-		while  (str.equals("stop") == false)
-		{
 			try {
 			System.out.println(">> entered while");
 			BufferedReader input = new BufferedReader(new InputStreamReader(this.mySocket.getInputStream()));
@@ -218,7 +216,7 @@ public class HandleRequest implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		
 
 	}
 	

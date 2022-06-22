@@ -35,12 +35,5 @@ public class Server implements Runnable {
 		}
 		System.out.println("Closing Server.");
 	}
-	
-	//API: TODO: use the api
-	public void AddSong() {};
-	public void RemoveSong() {};
-	public void SearchArtist() {};
-	public void SearchLyrics() {};
-	public void SearchSongTitle() {};
 
 }
