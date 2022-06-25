@@ -3,12 +3,13 @@ import java.util.List;
 import com.hit.dm.Song;
 
 public class Response {
-	String action = "empty";
-	boolean status = false;
-	List<Song> resultSongList = null;
+	private String action = "empty";
+	private boolean status = false;
+	private List<Song> resultSongList = null;
 	
 	public Response(String action, boolean status)
 	{
+		this.action = action;
 		this.status = status;
 	}
 	

@@ -2,11 +2,11 @@ package com.hit.server;
 
 public class Request {
 	
-	String command = "";
-	String title = "";
-	String artist = "";
-	String lyrics = "";
-	String search = "";
+	private String command = "";
+	private String title = "";
+	private String artist = "";
+	private String lyrics = "";
+	private String search = "";
 	int id = -1;
 	
 	public Request(String command, String title, String artist, String lyrics) // Add Ctor
