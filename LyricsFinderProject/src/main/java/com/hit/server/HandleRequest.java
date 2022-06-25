@@ -64,6 +64,11 @@ public class HandleRequest implements Runnable {
 						thisRequest = new Request(command, searchPattern);
 					}
 					break;
+				case "get_db":
+				{
+					thisRequest = new Request(command);
+				}
+				break;
 				default:
 					System.out.println("[SERVER] Request error");
 					break;
@@ -107,6 +112,10 @@ public class HandleRequest implements Runnable {
 			case "search_lyrics":
 				System.out.println("[Server] Search Lyrics command");
 				returnRes = new Response(request.getCommand(), controller.searchLyrics(request.getSearchPattern()));
+				break;
+			case "get_db":
+				System.out.println("[Server] Get all DB command");
+				returnRes = new Response(request.getCommand(), controller.getAllDB());
 				break;
 			default:
 				System.out.println("[Server] Unfamiliar command");

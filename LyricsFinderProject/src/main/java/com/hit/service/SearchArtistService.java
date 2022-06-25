@@ -18,7 +18,7 @@ public class SearchArtistService {
 		
 		for (int songIndex=0 ; songIndex < songList.size() ; songIndex++)
 		{
-			int artistExists = this.stringSearcher.compareStrings(songList.get(songIndex).getArtist(), artist);
+			int artistExists = this.stringSearcher.compareStrings(songList.get(songIndex).getArtist().toLowerCase(), artist.toLowerCase());
 			if (artistExists >= 0 ) // artist exists
 			{
 				Song addMe = new Song(songList.get(songIndex));

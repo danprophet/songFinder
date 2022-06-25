@@ -29,6 +29,11 @@ public class Request {
 		this.id = id;
 	}
 	
+	public Request(String command)
+	{
+		this.command = command;
+	}
+	
 	public String getCommand()
 	{
 		return this.command;

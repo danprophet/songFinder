@@ -19,7 +19,7 @@ public class SearchSongTitlesService {
 		
 		for (int songIndex=0 ; songIndex < songList.size() ; songIndex++)
 		{
-			int titlePos = this.stringSearcher.compareStrings(title, songList.get(songIndex).getTitle());
+			int titlePos = this.stringSearcher.compareStrings(songList.get(songIndex).getTitle().toLowerCase(), title.toLowerCase());
 			if (titlePos >= 0 ) // title exist
 			{
 				Song addMe = new Song(songList.get(songIndex));
@@ -29,6 +29,11 @@ public class SearchSongTitlesService {
 		
 		
 		return titleSongList;
+	}
+	
+	public List<Song> getAllSongsInDB() {
+		List<Song> songList = myDao.Read();
+		return songList;
 	}
 
 }

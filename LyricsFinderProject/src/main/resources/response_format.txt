@@ -24,3 +24,8 @@
 {"action":"search_lyrics"},
 "body": {"status": False, "songList": (JsonArray){Song, Song, Song}}
 }
+-----
+{"headers":
+{"action":"get_db"},
+"body": {"status": True, "songList": (JsonArray){Song, Song, Song}}
+}

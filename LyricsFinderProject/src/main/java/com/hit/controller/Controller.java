@@ -48,5 +48,12 @@ public class Controller {
 	{
 		return searchTitles.getTitleSongList(title);
 	}
+	
+	public List<Song> getAllDB()
+	{
+		return searchTitles.getAllSongsInDB();
+	}
+	
+	
 
 }
